@@ -1,7 +1,11 @@
 import { Gamestate, BotSelection } from '../models/gamestate';
 
 class Bot {
+    dynamite = 100;
+
     makeMove(gamestate: Gamestate): BotSelection {
+        if (Math.random() < 0.05 && this.dynamite-- > 0)
+            return 'D';
         return 'P';
     }
 }
