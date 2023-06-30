@@ -16,19 +16,23 @@ class Bot {
         if (gamestate.rounds[gamestate.rounds.length - 1].p1 === 'D') this.p1dynamite--;
         if (gamestate.rounds[gamestate.rounds.length - 1].p2 === 'D') this.p2dynamite--;
 
-        if (gamestate.rounds.length >= 3) {
+        for (let length = 3; length < gamestate.rounds.length - 1; length++) {
             const matches: number[] = [];
 
-            for (let i = 0; i < gamestate.rounds.length - 3; i++) {
-                if (gamestate.rounds[i].p2 === gamestate.rounds[gamestate.rounds.length - 3].p2 &&
-                    gamestate.rounds[i + 1].p2 === gamestate.rounds[gamestate.rounds.length - 2].p2 &&
-                    gamestate.rounds[i + 2].p2 === gamestate.rounds[gamestate.rounds.length - 1].p2
-                ) {
-                    matches.push(i);
+            for (let start = 0; start < gamestate.rounds.length - length - 1; start++) {
+                let match = true;
+
+                for (let offset = 0; offset < length; offset++) {
+                    if (gamestate.rounds[start + offset].p2 !== gamestate.rounds[gamestate.rounds.length - length + offset].p2) {
+                        match = false;
+                        break;
+                    }
                 }
+
+                if (match) matches.push(start);
             }
 
-            if (matches.length > 0) sel = wins[gamestate.rounds[matches[0] + 3].p2];
+            if (matches.length > 0) sel = wins[gamestate.rounds[matches[matches.length - 1] + length].p2];
         }
 
         return sel ?? options[Math.floor(Math.random() * 4)];
