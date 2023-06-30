@@ -5,13 +5,10 @@ class Bot {
     p2dynamite = 100;
 
     makeMove(gamestate: Gamestate): BotSelection {
-        const options: BotSelection[] = ['R', 'P', 'S', 'D', 'W'];
         const wins: {} = {'R': 'P', 'P': 'S', 'S': 'R', 'D': 'W', 'W': 'R'};
 
-        // start with random RPS
-        if (gamestate.rounds.length === 0) return options[Math.floor(Math.random() * 3)];
+        if (gamestate.rounds.length === 0) return this.chooseMove();
 
-        // track dynamite use
         if (gamestate.rounds[gamestate.rounds.length - 1].p1 === 'D') this.p1dynamite--;
         if (gamestate.rounds[gamestate.rounds.length - 1].p2 === 'D') this.p2dynamite--;
 
@@ -35,7 +32,12 @@ class Bot {
             }
         }
 
-        return options[Math.floor(Math.random() * 4)];
+        return this.chooseMove();
+    }
+
+    chooseMove() {
+        if (this.p1dynamite > 0) return 'D';
+        return 'P';
     }
 }
 
